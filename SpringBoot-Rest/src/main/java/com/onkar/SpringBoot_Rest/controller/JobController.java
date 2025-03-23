@@ -11,12 +11,12 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @GetMapping("jobPosts")
+    @GetMapping(path ="jobPosts", produces={"application/json"})
     public List<JobPost> getAllJobs(){
         return jobService.getAllJobs();
     }
 
-    @PostMapping("addJobs")
+    @PostMapping(path="addJobs",consumes = {"application/xml"})
     public void addJobs(@RequestBody JobPost jobPost){
         jobService.addJob(jobPost);
     }
@@ -24,5 +24,17 @@ public class JobController {
     @GetMapping("jobPost/{jobPostId}")
     public JobPost getJob(@PathVariable("jobPostId") int postId){
         return jobService.getJob(postId);
+    }
+
+    @PutMapping("jobPost")
+    public JobPost updateJob(@RequestBody JobPost jobPost){
+        jobService.updateJob(jobPost);
+        return jobService.getJob(jobPost.getPostId());
+    }
+
+    @DeleteMapping("jobPost/{postId}")
+    public String deleteJob(@PathVariable int postId){
+        jobService.deleteJob(postId);
+    return "Deleted";
     }
 }
